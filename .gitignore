@@ -1,0 +1,12 @@
+# Executaveis gerados pela compilacao
+executar
+*.out
+
+# Arquivos objeto
+*.o
+
+# Logs gerados durante a execucao
+log.txt
+log_1_thread.txt
+log_n_threads.txt
+log_*.txt
