@@ -21,6 +21,7 @@ int contarLinhasArquivo(const char *caminho, int *totalLinhas) {
     return 1;
 }
 
+// le os ids do arquivo e os armazena em um vetor
 int *carregarListaIds(const char *caminho, int *total) {
     FILE *arquivo = fopen(caminho, "r");
     int contador = 0;
@@ -31,6 +32,7 @@ int *carregarListaIds(const char *caminho, int *total) {
         return NULL;
     }
 
+    // primeira leitura para contar quantos IDs existem para poder determinar o tamanho do vetor
     while (fscanf(arquivo, "%d", &id) == 1) {
         contador++;
     }
@@ -43,6 +45,7 @@ int *carregarListaIds(const char *caminho, int *total) {
         return NULL;
     }
 
+    // segunda leitura para armazenar os IDs no vetor
     for (int i = 0; i < contador; i++) {
         fscanf(arquivo, "%d", &lista[i]);
     }

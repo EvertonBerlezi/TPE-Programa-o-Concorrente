@@ -12,13 +12,14 @@ int main() {
     const int totalExecucoes = 2;
                                 // vvv numero de threads a serem executadas em cada execucao do P1
     const int numeroExecucoes[] = {1, 8};
-                                            // caminho do arquivo de lista de IDs
+                                            // vvv caminho do arquivo de lista de IDs
     const char *caminhoLista = "listas_ids/lista_ids_grande.txt";
     double tempos[totalExecucoes];
     char statusExecucoes[totalExecucoes][80];
     int enriquecimentoIncompleto[totalExecucoes];
     int totalIdsEntrada;
 
+    // P0 conta os IDs e guarda a contagem dentro de totalIdsEntrada para comparar com a quantidade de linhas do log mais tarde
     if (!contarLinhasArquivo(caminhoLista, &totalIdsEntrada)) {
         return 1;
     }
@@ -80,12 +81,14 @@ int main() {
         struct timespec fim;
         clock_gettime(CLOCK_MONOTONIC, &fim);
         double tempoTotal = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1000000000.0;
+        // confere se a quantidade de ids no log bate com a da lista
         int linhasLog;
         if (!contarLinhasArquivo(nomeLog, &linhasLog)) {
             linhasLog = -1;
         }
         const char *statusP1;
 
+        // classifica a forma que o P1 terminou
         if (WIFEXITED(status)) {
             statusP1 = (WEXITSTATUS(status) == 0)
                 ? "termino normal"

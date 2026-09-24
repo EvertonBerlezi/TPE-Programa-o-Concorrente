@@ -23,16 +23,18 @@ void obterTimestamp(char *buffer, int tamanho) {
 }
 
 void apiMockada(int id, char *resposta_api) {
-    usleep(100);
+    usleep(100); // simula a latencia da API
     sprintf(resposta_api, "{\"id\": %d, \"status\": \"ok\", \"valor\": %.2f}", id, (float)id * 4.5);
 }
 
+// funcao executada por cada thread de P1
 void *execucaoThread(void *arg) {
     int numeroThread = (int)(long)arg;
     char respostaApi[300];
     char timestamp[30];
 
     while (TRUE) {
+        // mutex para cada thread pegar um ID sem condicao de corrida
         pthread_mutex_lock(&mutex_leitura);
 
         if (indiceAtual >= totalIds) {
@@ -45,9 +47,11 @@ void *execucaoThread(void *arg) {
 
         pthread_mutex_unlock(&mutex_leitura);
 
+        // consulta fora do mutex para permitir o paralelismo
         apiMockada(idProcessado, respostaApi);
         obterTimestamp(timestamp, sizeof(timestamp));
 
+        // mutex para cada thread escrever no log sem condicao de corrida
         pthread_mutex_lock(&mutex_escrita);
         fprintf(arquivoLog, "%s, Thread-%d, %d, %s\n", timestamp, numeroThread, idProcessado, respostaApi);
         pthread_mutex_unlock(&mutex_escrita);
